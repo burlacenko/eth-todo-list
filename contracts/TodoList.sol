@@ -1,7 +1,11 @@
 pragma solidity ^0.5.0;
 
 contract TodoList {
-  uint public taskCount = 0;
+  
+  // we define "taskCount" as a special kind of variable called "STATE variable" which is written to the blockchain:
+  // scope is like "global" to all app 
+  // "public" is like a built in read function for this variable
+  uint public taskCount = 0; 
 
   struct Task {
     uint id;
