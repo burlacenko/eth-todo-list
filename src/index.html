@@ -40,6 +40,23 @@
         text-decoration: line-through;
       }
     </style>
+
+    <!-- tried this to solve error with web3 -->
+    <!-- https://ethereum.stackexchange.com/questions/52794/uncaught-referenceerror-web3-is-not-defined-solidity -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script> -->
+    <!-- but there simply commented code following this: -->
+    <!-- https://docs.metamask.io/guide/provider-migration.html#replacing-window-web3 -->
+    
+    <!-- NEW: https://github.com/MetaMask/detect-provider -->
+    <!-- check link above to see how to use in a react-app with "import" module -->
+    <!-- import detectEthereumProvider from '@metamask/detect-provider' -->
+    <!-- The legacy-web3 script must run BEFORE your other scripts. -->
+    <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+    <!-- Or: -->
+    <!-- <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.js"></script> -->
+    ...    
+    <script src="https://unpkg.com/@metamask/detect-provider/dist/detect-provider.min.js"></script>
+
   </head>
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
@@ -81,6 +98,8 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="vendor/truffle-contract/dist/truffle-contract.js"></script>
+    
+
     <script src="app.js"></script>
   </body>
 </html>

@@ -1,16 +1,29 @@
+// extra remarks: to make it run, I changed Ganache network id to 1337 (instead of 5777)
+// so now Metamask wallet is running in Brave at "acoount 2" for http://127.0.0.1:7545 chain Id 1337 network Id 1337 HardFork (changed to): Byzantium
+
 App = {
   loading: false,
   contracts: {},
 
+  // step 1
   load: async () => {
+    console.log("app loading...")
+    // loads web3 and configuration established by MetaMask itself:
     await App.loadWeb3()
+    // await App.loadProvider()
     await App.loadAccount()
     await App.loadContract()
     await App.render()
   },
-
   // https://medium.com/metamask/https-medium-com-metamask-breaking-change-injecting-web3-7722797916a8
+  // THIS "loadWeb3" LOADS the connection to the blockchain
+  // NOTE: web3 is legacy and I only made it work because of a call to 
+  // old legacy with following "script" in head:
+  // <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+  // as instructed in https://www.npmjs.com/package/@metamask/legacy-web3
+  // but we should move to new "detect-provider" pack to be implemented at loadProvider()
   loadWeb3: async () => {
+    // error here: Web3 is not defined
     if (typeof web3 !== 'undefined') {
       App.web3Provider = web3.currentProvider
       web3 = new Web3(web3.currentProvider)
@@ -42,9 +55,35 @@ App = {
     }
   },
 
+  // but we should move to new "detect-provider" pack to be implemented at loadProvider()
+  // check https://github.com/MetaMask/detect-provider
+  loadProvider: async () => {
+    const provider = await detectEthereumProvider()
+    if (provider) {
+      console.log('Ethereum successfully detected!')
+
+      // From now on, this should always be true:
+      // provider === window.ethereum
+    
+      // Access the decentralized web!
+    
+      // Legacy providers may only have ethereum.sendAsync
+      const chainId = await provider.request({
+        method: 'eth_chainId'
+      })
+    } else {
+      // if the provider is not detected, detectEthereumProvider resolves to null
+      console.error('Please install MetaMask!', error)
+    }    
+  },
+
   loadAccount: async () => {
     // Set the current blockchain account
-    App.account = web3.eth.accounts[0]
+    // window.web3
+    // App.account = web3.eth.accounts[0]
+    // window.ethereum
+    const accounts = await ethereum.request({ method: 'eth_accounts' });
+    App.account = accounts[0];
   },
 
   loadContract: async () => {
@@ -137,6 +176,7 @@ App = {
   }
 }
 
+// step 2
 $(() => {
   $(window).load(() => {
     App.load()
